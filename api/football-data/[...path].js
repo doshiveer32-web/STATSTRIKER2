@@ -1,4 +1,6 @@
 export default async function handler(req, res) {
+  console.log("PROXY HIT:", req.url);
+
   try {
     // Get the path from Vercel's catch-all route
     let path = "";
