@@ -1,33 +1,57 @@
 export default async function handler(req, res) {
   try {
-    let path = Array.isArray(req.query.path)
-      ? req.query.path.join("/")
-      : req.query.path || "";
+    // Get the path from Vercel's catch-all route
+    let path = "";
 
-    // Remove accidental prefixes if they are included
-    path = path
-      .replace(/^\/+/, "")
-      .replace(/^football-data\/?/, "")
-      .replace(/^v4\/?/, "");
+    if (Array.isArray(req.query?.path)) {
+      path = req.query.path.join("/");
+    } else if (typeof req.query?.path === "string") {
+      path = req.query.path;
+    }
 
-    const incomingUrl = new URL(
-      req.url,
-      "http://localhost"
-    );
+    // Fallback: extract path directly from the request URL
+    if (!path) {
+      const url = new URL(req.url, "http://localhost");
 
-    const queryString = incomingUrl.search;
+      const pathname = url.pathname;
+
+      const prefix = "/api/football-data/";
+
+      if (pathname.startsWith(prefix)) {
+        path = pathname.slice(prefix.length);
+      }
+    }
+
+    // Remove leading/trailing slashes
+    path = path.replace(/^\/+|\/+$/g, "");
+
+    if (!path) {
+      return res.status(400).json({
+        error: "API path is missing",
+      });
+    }
+
+    // Build query parameters WITHOUT forwarding the catch-all "path"
+    const incomingUrl = new URL(req.url, "http://localhost");
+
+    const params = new URLSearchParams(incomingUrl.search);
+
+    params.delete("path");
+
+    const queryString = params.toString()
+      ? `?${params.toString()}`
+      : "";
 
     const apiUrl =
-      `https://api.football-data.org/v4/${path}` +
-      queryString;
+      `https://api.football-data.org/v4/${path}${queryString}`;
 
-    console.log("Requesting Football-Data URL:", apiUrl);
+    console.log("Football API request:", apiUrl);
 
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
         "X-Auth-Token": process.env.FOOTBALL_DATA_API_KEY,
-        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
 
@@ -43,12 +67,6 @@ export default async function handler(req, res) {
     }
 
     if (!response.ok) {
-      console.error(
-        "Football-Data API error:",
-        response.status,
-        data
-      );
-
       return res.status(response.status).json({
         error: "Football data API request failed",
         status: response.status,
