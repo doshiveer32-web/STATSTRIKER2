@@ -1,8 +1,14 @@
 export default async function handler(req, res) {
   try {
-    const path = Array.isArray(req.query.path)
+    let path = Array.isArray(req.query.path)
       ? req.query.path.join("/")
       : req.query.path || "";
+
+    // Remove accidental prefixes if they are included
+    path = path
+      .replace(/^\/+/, "")
+      .replace(/^football-data\/?/, "")
+      .replace(/^v4\/?/, "");
 
     const incomingUrl = new URL(
       req.url,
@@ -15,12 +21,13 @@ export default async function handler(req, res) {
       `https://api.football-data.org/v4/${path}` +
       queryString;
 
+    console.log("Requesting Football-Data URL:", apiUrl);
+
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
-        "X-Auth-Token":
-          process.env.FOOTBALL_DATA_API_KEY,
-        "Content-Type": "application/json",
+        "X-Auth-Token": process.env.FOOTBALL_DATA_API_KEY,
+        Accept: "application/json",
       },
     });
 
@@ -36,10 +43,17 @@ export default async function handler(req, res) {
     }
 
     if (!response.ok) {
+      console.error(
+        "Football-Data API error:",
+        response.status,
+        data
+      );
+
       return res.status(response.status).json({
         error: "Football data API request failed",
         status: response.status,
         details: data,
+        requestedUrl: apiUrl,
       });
     }
 
