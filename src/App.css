@@ -11970,3 +11970,171 @@ main:has(.comparison-page) {
     justify-content: center;
   }
 }
+/* =========================================================
+   MATCHES PAGE FIX
+   Prevent white overlay / washed-out match content
+   ========================================================= */
+
+.matches-page {
+  position: relative !important;
+  isolation: isolate !important;
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+/* Kill accidental pseudo-element overlays */
+.matches-page::before,
+.matches-page::after,
+.matches-content::before,
+.matches-content::after,
+.matches-list::before,
+.matches-list::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Main matches content */
+.matches-content {
+  position: relative !important;
+  z-index: 2 !important;
+  background: rgba(8, 10, 15, 0.92) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Header */
+.matches-content-header {
+  position: relative !important;
+  z-index: 3 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.matches-content-header h2,
+.matches-content-header span {
+  color: #ffffff !important;
+}
+
+/* League cards */
+.matches-leagues {
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.matches-league {
+  position: relative !important;
+  z-index: 5 !important;
+  color: #ffffff !important;
+  background: #151922 !important;
+  opacity: 1 !important;
+}
+
+.matches-league strong,
+.matches-league span {
+  color: #ffffff !important;
+}
+
+.matches-league.active {
+  background: #f4510b !important;
+  color: #ffffff !important;
+}
+
+/* Controls */
+.matches-controls {
+  position: relative !important;
+  z-index: 5 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Match list */
+.matches-list {
+  position: relative !important;
+  z-index: 3 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Individual match cards */
+.match-card {
+  position: relative !important;
+  z-index: 3 !important;
+  display: grid !important;
+  background: rgba(15, 18, 25, 0.96) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  filter: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Match text */
+.match-card h3,
+.match-card strong,
+.match-card span,
+.match-date,
+.match-team,
+.match-score,
+.match-competition {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Secondary text */
+.match-date span,
+.match-team span,
+.match-competition span,
+.match-competition small {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Score */
+.match-score .score strong {
+  color: #ffffff !important;
+}
+
+/* Status */
+.match-status {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.live-badge,
+.live-status {
+  color: #ffffff !important;
+  background: #f4510b !important;
+}
+
+/* Loading state */
+.loading-state {
+  position: relative !important;
+  z-index: 10 !important;
+  background: rgba(8, 10, 15, 0.96) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Error / empty states */
+.error-card,
+.empty-state {
+  position: relative !important;
+  z-index: 10 !important;
+  background: rgba(15, 18, 25, 0.96) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.error-card h2,
+.error-card p,
+.empty-state h3,
+.empty-state p {
+  color: #ffffff !important;
+}
+
+/* Remove common white skeleton/shine overlays */
+.matches-page .skeleton,
+.matches-page .shimmer,
+.matches-page .loading-overlay,
+.matches-page .page-overlay,
+.matches-page .overlay {
+  display: none !important;
+}
