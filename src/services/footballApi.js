@@ -1,6 +1,6 @@
 const apiRequest = async (endpoint) => {
   const response = await fetch(
-    `/api/football-data/${endpoint}`
+    `/api/football-data?endpoint=${encodeURIComponent(endpoint)}`
   );
 
   if (!response.ok) {

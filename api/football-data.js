@@ -6,34 +6,38 @@ export default async function handler(req, res) {
       });
     }
 
-    const path = Array.isArray(req.query.path)
-      ? req.query.path.join("/")
-      : req.query.path;
+    const endpoint = req.query.endpoint;
 
-    if (!path) {
+    if (!endpoint) {
       return res.status(400).json({
-        error: "API path is missing",
+        error: "Missing endpoint",
       });
     }
 
-    const url = new URL(
-      `https://api.football-data.org/v4/${path}`
+    const apiUrl = new URL(
+      `https://api.football-data.org/v4/${endpoint}`
     );
 
+    // Forward all query parameters except endpoint
     for (const [key, value] of Object.entries(req.query)) {
-      if (key !== "path" && value !== undefined) {
-        url.searchParams.set(
+      if (key !== "endpoint" && value !== undefined) {
+        apiUrl.searchParams.set(
           key,
           Array.isArray(value) ? value[0] : value
         );
       }
     }
 
-    console.log("Football API request:", url.toString());
+    console.log(
+      "Football API request:",
+      apiUrl.toString()
+    );
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(apiUrl.toString(), {
+      method: "GET",
       headers: {
-        "X-Auth-Token": process.env.FOOTBALL_DATA_API_KEY,
+        "X-Auth-Token":
+          process.env.FOOTBALL_DATA_API_KEY,
       },
     });
 
@@ -48,7 +52,11 @@ export default async function handler(req, res) {
     }
 
     if (!response.ok) {
-      console.error("Football API error:", response.status, data);
+      console.error(
+        "Football API error:",
+        response.status,
+        data
+      );
 
       return res.status(response.status).json({
         error: "Football data API request failed",
@@ -59,7 +67,10 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error("Proxy error:", error);
+    console.error(
+      "Football proxy error:",
+      error
+    );
 
     return res.status(500).json({
       error: "Failed to fetch football data",
