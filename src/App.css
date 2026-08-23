@@ -11598,3 +11598,375 @@ main:has(.comparison-page) {
     padding: 22px;
   }
 }
+/* =========================================================
+   MATCHES PAGE - FINAL OVERRIDE
+   ========================================================= */
+
+.matches-page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+  box-sizing: border-box;
+  color: #fff;
+  background: transparent !important;
+}
+
+/* League buttons */
+.matches-page .matches-leagues {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 28px 0 20px;
+}
+
+.matches-page .matches-league {
+  min-height: 72px;
+  padding: 15px;
+  background: #101010 !important;
+  border: 1px solid #252525 !important;
+  border-radius: 10px;
+  color: #fff !important;
+  text-align: left;
+  cursor: pointer;
+}
+
+.matches-page .matches-league.active {
+  background: #ff6a00 !important;
+  border-color: #ff6a00 !important;
+}
+
+/* Controls */
+.matches-page .matches-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  margin-bottom: 30px;
+  background: #0d0d0d !important;
+  border: 1px solid #242424 !important;
+  border-radius: 10px;
+}
+
+.matches-page .matches-seasons,
+.matches-page .matches-status {
+  display: flex;
+  gap: 5px;
+}
+
+.matches-page .matches-season,
+.matches-page .matches-status-button {
+  padding: 9px 13px;
+  background: #151515 !important;
+  border: 1px solid #292929 !important;
+  border-radius: 6px;
+  color: #777 !important;
+  cursor: pointer;
+}
+
+.matches-page .matches-season.active {
+  background: #ff6a00 !important;
+  border-color: #ff6a00 !important;
+  color: #fff !important;
+}
+
+.matches-page .matches-status-button.active {
+  background: #181818 !important;
+  border-color: #ff6a00 !important;
+  color: #ff6a00 !important;
+}
+
+/* Search */
+.matches-page .matches-search {
+  margin-left: auto;
+}
+
+.matches-page .matches-search input {
+  width: 190px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background: #151515 !important;
+  border: 1px solid #292929 !important;
+  border-radius: 6px;
+  color: #fff !important;
+  outline: none;
+}
+
+/* Match cards */
+.matches-page .matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.matches-page .match-card {
+  display: grid;
+  grid-template-columns:
+    115px
+    minmax(190px, 1fr)
+    130px
+    minmax(190px, 1fr)
+    150px;
+
+  align-items: center;
+  min-height: 90px;
+  padding: 10px 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 69, 0, 0.12),
+      rgba(20, 20, 25, 0.95)
+    ) !important;
+
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.matches-page .match-card.live {
+  border-color: #ff6a00 !important;
+}
+
+/* Teams */
+.matches-page .match-team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  color: #fff !important;
+}
+
+.matches-page .match-team.home {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.matches-page .match-team.away {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.matches-page .match-team img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.matches-page .match-team span {
+  display: block;
+  margin-bottom: 4px;
+  color: #666 !important;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.matches-page .match-team h3 {
+  margin: 0;
+  color: #fff !important;
+  font-size: 12px;
+}
+
+/* Score */
+.matches-page .match-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.matches-page .score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.matches-page .score strong {
+  min-width: 20px;
+  color: #fff !important;
+  font-size: 18px;
+  text-align: center;
+}
+
+.matches-page .score span {
+  color: #555 !important;
+}
+
+.matches-page .match-status {
+  color: #777 !important;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.matches-page .live-status {
+  color: #ff6a00 !important;
+}
+
+.matches-page .live-badge {
+  padding: 3px 7px;
+  background: #ff6a00 !important;
+  border-radius: 4px;
+  color: #fff !important;
+  font-size: 7px !important;
+  font-weight: 900 !important;
+}
+
+/* Competition */
+.matches-page .match-competition {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.matches-page .match-competition span {
+  color: #777 !important;
+  font-size: 9px;
+  text-align: right;
+}
+
+.matches-page .match-competition small {
+  color: #555 !important;
+  font-size: 8px;
+}
+
+/* Loading / errors */
+.matches-page .loading-state,
+.matches-page .error-card,
+.matches-page .empty-state {
+  background: #0d0d0d !important;
+  color: #fff !important;
+  border: 1px solid #242424 !important;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+}
+
+.matches-page .loading-state p,
+.matches-page .error-card p,
+.matches-page .empty-state p {
+  color: #aaa !important;
+}
+
+.matches-page .error-card h2,
+.matches-page .empty-state h3 {
+  color: #fff !important;
+}
+
+/* Header */
+.matches-page .matches-content-header h2 {
+  color: #fff !important;
+}
+
+.matches-page .matches-content-header > span {
+  color: #777 !important;
+}
+
+/* Responsive */
+@media (max-width: 1150px) {
+  .matches-page .matches-leagues {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .matches-page .matches-controls {
+    flex-wrap: wrap;
+  }
+
+  .matches-page .matches-search {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .matches-page .matches-search input {
+    width: 100%;
+  }
+
+  .matches-page .match-card {
+    grid-template-columns:
+      90px
+      1fr
+      110px
+      1fr;
+  }
+
+  .matches-page .match-competition {
+    display: none;
+  }
+}
+
+@media (max-width: 750px) {
+  .matches-page {
+    padding: 20px;
+  }
+
+  .matches-page .matches-leagues {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .matches-page .matches-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .matches-page .matches-seasons,
+  .matches-page .matches-status {
+    width: 100%;
+  }
+
+  .matches-page .matches-season,
+  .matches-page .matches-status-button {
+    flex: 1;
+  }
+
+  .matches-page .match-card {
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 8px;
+    padding: 15px;
+  }
+
+  .matches-page .match-date {
+    grid-column: 1 / -1;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 8px;
+  }
+
+  .matches-page .match-team.home {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .matches-page .match-score {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .matches-page .match-team.away {
+    grid-column: 3;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 500px) {
+  .matches-page .matches-leagues {
+    grid-template-columns: 1fr;
+  }
+
+  .matches-page .match-team {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
+
+  .matches-page .match-team.home,
+  .matches-page .match-team.away {
+    justify-content: center;
+  }
+}
