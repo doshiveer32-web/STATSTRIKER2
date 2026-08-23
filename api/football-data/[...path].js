@@ -1,19 +1,12 @@
 export default async function handler(req, res) {
   try {
-    let path = req.query?.path;
+    const pathParam = req.query?.path;
 
-    if (Array.isArray(path)) {
-      path = path.join("/");
-    }
-
-    if (!path) {
-      const url = new URL(req.url, "http://localhost");
-      const prefix = "/api/football-data/";
-
-      if (url.pathname.startsWith(prefix)) {
-        path = url.pathname.slice(prefix.length);
-      }
-    }
+    const path = Array.isArray(pathParam)
+      ? pathParam.join("/")
+      : typeof pathParam === "string"
+        ? pathParam
+        : "";
 
     if (!path) {
       return res.status(400).json({
@@ -21,11 +14,9 @@ export default async function handler(req, res) {
       });
     }
 
-    path = path.replace(/^\/+|\/+$/g, "");
+    const incomingUrl = new URL(req.url, "http://localhost");
 
-    const url = new URL(req.url, "http://localhost");
-    const params = new URLSearchParams(url.search);
-
+    const params = new URLSearchParams(incomingUrl.search);
     params.delete("path");
 
     const queryString = params.toString()
@@ -35,13 +26,13 @@ export default async function handler(req, res) {
     const apiUrl =
       `https://api.football-data.org/v4/${path}${queryString}`;
 
-    console.log("Football API request:", apiUrl);
+    console.log("FOOTBALL API PROXY:", apiUrl);
 
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
         "X-Auth-Token": process.env.FOOTBALL_DATA_API_KEY,
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     });
 
@@ -52,13 +43,12 @@ export default async function handler(req, res) {
       ? await response.json()
       : await response.text();
 
-    if (!response.ok) {
-      console.error(
-        "Football API error:",
-        response.status,
-        data
-      );
+    console.log(
+      "FOOTBALL API STATUS:",
+      response.status
+    );
 
+    if (!response.ok) {
       return res.status(response.status).json({
         error: "Football data API request failed",
         status: response.status,
@@ -68,10 +58,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error(
-      "Football-data proxy error:",
-      error
-    );
+    console.error("FOOTBALL PROXY ERROR:", error);
 
     return res.status(500).json({
       error: "Failed to fetch football data",
