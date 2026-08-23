@@ -1,43 +1,39 @@
 export default async function handler(req, res) {
   try {
-    const path = req.query.path;
+    let path = req.query?.path;
 
-    const segments = Array.isArray(path)
-      ? path
-      : typeof path === "string"
-        ? path.split("/")
-        : [];
+    if (Array.isArray(path)) {
+      path = path.join("/");
+    }
 
-    const footballPath = segments
-      .filter(Boolean)
-      .join("/");
+    if (!path) {
+      const url = new URL(req.url, "http://localhost");
+      const prefix = "/api/football-data/";
 
-    if (!footballPath) {
+      if (url.pathname.startsWith(prefix)) {
+        path = url.pathname.slice(prefix.length);
+      }
+    }
+
+    if (!path) {
       return res.status(400).json({
         error: "API path is missing",
       });
     }
 
-    const params = new URLSearchParams();
+    path = path.replace(/^\/+|\/+$/g, "");
 
-    for (const [key, value] of Object.entries(req.query)) {
-      if (key === "path") continue;
+    const url = new URL(req.url, "http://localhost");
+    const params = new URLSearchParams(url.search);
 
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          params.append(key, item);
-        });
-      } else if (value !== undefined) {
-        params.append(key, value);
-      }
-    }
+    params.delete("path");
 
     const queryString = params.toString()
       ? `?${params.toString()}`
       : "";
 
     const apiUrl =
-      `https://api.football-data.org/v4/${footballPath}${queryString}`;
+      `https://api.football-data.org/v4/${path}${queryString}`;
 
     console.log("Football API request:", apiUrl);
 
@@ -45,19 +41,16 @@ export default async function handler(req, res) {
       method: "GET",
       headers: {
         "X-Auth-Token": process.env.FOOTBALL_DATA_API_KEY,
+        "Accept": "application/json",
       },
     });
 
     const contentType =
       response.headers.get("content-type") || "";
 
-    let data;
-
-    if (contentType.includes("application/json")) {
-      data = await response.json();
-    } else {
-      data = await response.text();
-    }
+    const data = contentType.includes("application/json")
+      ? await response.json()
+      : await response.text();
 
     if (!response.ok) {
       console.error(
