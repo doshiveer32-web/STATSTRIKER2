@@ -2,30 +2,24 @@ export default async function handler(req, res) {
   console.log("PROXY HIT:", req.url);
 
   try {
-    // Get the path from Vercel's catch-all route
-    let path = "";
+    // Get the actual URL path
+    const incomingUrl = new URL(req.url, "http://localhost");
 
-    if (Array.isArray(req.query?.path)) {
-      path = req.query.path.join("/");
-    } else if (typeof req.query?.path === "string") {
-      path = req.query.path;
+    const pathname = incomingUrl.pathname;
+
+    const prefix = "/api/football-data/";
+
+    // Extract everything after /api/football-data/
+    if (!pathname.startsWith(prefix)) {
+      return res.status(400).json({
+        error: "Invalid API path",
+        pathname,
+      });
     }
 
-    // Fallback: extract path directly from the request URL
-    if (!path) {
-      const url = new URL(req.url, "http://localhost");
-
-      const pathname = url.pathname;
-
-      const prefix = "/api/football-data/";
-
-      if (pathname.startsWith(prefix)) {
-        path = pathname.slice(prefix.length);
-      }
-    }
-
-    // Remove leading/trailing slashes
-    path = path.replace(/^\/+|\/+$/g, "");
+    const path = pathname
+      .slice(prefix.length)
+      .replace(/^\/+|\/+$/g, "");
 
     if (!path) {
       return res.status(400).json({
@@ -33,9 +27,8 @@ export default async function handler(req, res) {
       });
     }
 
-    // Build query parameters WITHOUT forwarding the catch-all "path"
-    const incomingUrl = new URL(req.url, "http://localhost");
-
+    // Only forward REAL query parameters.
+    // Never forward Vercel's catch-all "path" parameter.
     const params = new URLSearchParams(incomingUrl.search);
 
     params.delete("path");
@@ -79,10 +72,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error(
-      "Football-data.org proxy error:",
-      error
-    );
+    console.error("Football-data.org proxy error:", error);
 
     return res.status(500).json({
       error: "Failed to fetch football data",
